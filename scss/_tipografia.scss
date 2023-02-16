@@ -1,0 +1,43 @@
+
+
+
+#estilotitulop {
+    font-size: $tamaño-titulo;
+    font-weight: $negrilla;
+    font-family: $letra-poors;
+    color: $color-titulo;
+    background-color: $colorfondo-titulo;
+    border: solid $colorborde-titulo;
+    border-radius: 40%;
+    padding: 30px;
+    text-align: center;
+    align-items: center;
+    margin-left: auto;
+    display: flex;
+}
+
+.estiloletrap {
+    font-weight: $negrilla;
+    font-family: $letra-poors;
+    text-align: center;
+}
+
+.estiloletranor p {
+    font-family: $letra-arial;
+}
+
+.letracolor h2 {
+    color: rgb(160, 13, 13);
+}
+
+.formulario {
+    font-size: 20px;
+}
+
+.letrag {
+    font-size: 20px;
+}
+
+.letrarial {
+    font-family: Arial, Helvetica, sans-serif;
+}

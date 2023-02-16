@@ -1,0 +1,48 @@
+@charset "UTF-8";
+@import 'variables';
+@import 'base';
+
+@import 'tipografia';
+@import 'flex';
+@import 'figuras';
+@import 'footer';
+
+#imglogo {
+    width: $ancho-logo;
+    height: auto;
+    margin: $margen-logo;
+    border-radius: $borde-logo;
+    border: $color-bordelo;
+}
+
+ul {
+    list-style: none;
+}
+
+.listap {
+    background-color: antiquewhite;
+
+    ul {
+        padding: 5px;
+        margin: 5px;
+
+        li {
+            border: solid black;
+            text-align: center;
+            font-size: 25px;
+
+            &:hover {
+                list-style: none;
+            }
+        }
+    }
+
+}
+
+.mover {
+    margin: 30px 35px 30px 35px;
+}
+
+.fondone {
+    background-color: aliceblue;
+}

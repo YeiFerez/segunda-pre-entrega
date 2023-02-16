@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: rgb(187, 187, 187);
+}
+
+.dentrop {
+    max-width: 1200px;
+    background: white;
+    margin: auto;
+}
+
+header {
+    background-color: $color-encabezado;
+}
+
+p {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+h1 {
+    justify-content: center;
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+    font-size: 25px;
+}

@@ -1,0 +1,22 @@
+
+.flex {
+    display: flex;
+}
+
+nav {
+    display: flex;
+    align-items: flex-end;
+    margin-left: auto;
+}
+
+.col {
+    flex-basis: 50%;
+}
+
+.a30 {
+    flex-basis: 30%;
+}
+
+.a70 {
+    flex-basis: 70%;
+}
