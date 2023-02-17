@@ -140,7 +140,7 @@ if (isNaN(nombre)) {
                     break;
             }
 
-            tipocel = prompt("ingrese la marca de celular que desea, solo => apple samsung xiaomi");
+            tipocel = prompt("ingrese la marca de celular que desea, solo => apple samsung xiaomi. O escriba ESC para salir");
         }
 
     } else if (Producto.toUpperCase() === "JUEGOS") {
@@ -316,7 +316,7 @@ if (isNaN(nombre)) {
                     break;
             }
 
-            tipojue = prompt("ingrese el nombre del juego que desea. Disponibles => call of duty, god of war, overwatch, fifa23, evilwest, spiderman");
+            tipojue = prompt("ingresa el juego que escogiste. Disponibles => call of duty, god of war, overwatch, fifa23, evilwest, spiderman. O presiona ESC para salir");
         }
 
     } else {
