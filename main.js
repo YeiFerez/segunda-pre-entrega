@@ -16,10 +16,53 @@ if (isNaN(nombre)) {
     const suma = (a, b) => a + b;
     const iva = valor => valor * 0.19;
 
+    let celularesStock = [
+        { id: 1, nombre: "Apple", precio: 1000, descuento: 200 },
+        { id: 2, nombre: "Samsung", precio: 700, descuento: 100 },
+        { id: 3, nombre: "Xiaomi", precio: 490, descuento: 70 },
+    ];
+
+    let juegosStock = [
+        { id: 1, nombre: "Call of duty", precio: 200, descuento: 30, pesogb: 15 },
+        { id: 2, nombre: "God of War", precio: 190, descuento: 28, pesogb: 10 },
+        { id: 3, nombre: "OverWatch", precio: 220, descuento: 35, pesogb: 16 },
+        { id: 4, nombre: "Fifa23", precio: 250, descuento: 40, pesogb: 5 },
+        { id: 5, nombre: "EvilWest", precio: 150, descuento: 18, pesogb: 12 },
+        { id: 6, nombre: "SpiderMan", precio: 280, descuento: 60, pesogb: 8 },
+    ];
+
 
     if (Producto.toUpperCase() === "CELULARES") {
 
-        let tipocel = prompt("ingrese la marca de celular que desea, solo => apple samsung xiaomi");
+        let mensaje = "";
+        celularesStock.forEach(celular => {
+            mensaje += `
+          ID: ${celular.id}
+          Nombre: ${celular.nombre}
+          `;
+        });
+        alert(`
+        Celulares disponibles:
+        ${mensaje}
+        `);
+
+        let dineroDisponible = parseInt(prompt("Con cuanto dinero dispones? te recomendamos tus mejores opciones"));
+        let filtrados = celularesStock.filter(celu => celu.precio < dineroDisponible);
+        let mensaje2 = "";
+        filtrados.forEach((celu) =>{
+            mensaje2 += `
+            ID: ${celu.id}
+            Nombre: ${celu.nombre}
+            Precio: ${celu.precio} USD
+            `;
+        });
+        alert(`
+        Celulares Recomendados para ti:
+        ${mensaje2}
+        `);
+
+
+        let tipocel = prompt("ingrese la marca de celular que escogiste, Escibe ESC para salir");
         alert("recuerda que el impuesto es del 19% al precio publicado");
 
         while (tipocel != "ESC") {
@@ -28,8 +71,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Apple es de 1000 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 200 USD");
 
                     let decisionapple = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto = 1000;
-                    let descuento = 200;
+                    let precioProducto = celularesStock[0].precio;
+                    let descuento = celularesStock[0].descuento;
 
                     if (decisionapple.toUpperCase() === "SI") {
 
@@ -51,8 +94,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Samsung es de 700 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 100 USD");
 
                     let decisionsamsung = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto1 = 700;
-                    let descuento1 = 100;
+                    let precioProducto1 = celularesStock[1].precio;
+                    let descuento1 = celularesStock[1].descuento;
 
                     if (decisionsamsung.toUpperCase() === "SI") {
 
@@ -74,8 +117,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Xiaomi es de 490 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 70 USD");
 
                     let decisionxiaomi = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto2 = 490;
-                    let descuento2 = 70;
+                    let precioProducto2 = celularesStock[2].precio;
+                    let descuento2 = celularesStock[2].descuento;
 
                     if (decisionxiaomi.toUpperCase() === "SI") {
 
@@ -102,7 +145,34 @@ if (isNaN(nombre)) {
 
     } else if (Producto.toUpperCase() === "JUEGOS") {
 
-        let tipojue = prompt("ingrese el nombre del juego que desea. Disponibles => call of duty, god of war, overwatch, fifa23, evilwest, spiderman");
+        let mensaje = "";
+        juegosStock.forEach(juego => {
+            mensaje += `
+            ID: ${juego.id}
+          Nombre: ${juego.nombre}
+          `;
+        });
+        alert(`
+        Juegos disponibles:
+        ${mensaje}
+        `);
+
+        let dineroDisponible2 = parseInt(prompt("Con cuanto dinero dispones? te recomendamos tus mejores opciones"));
+        let filtrados2 = juegosStock.filter(juego => juego.precio < dineroDisponible2);
+        let mensaje2 = "";
+        filtrados2.forEach((juego) =>{
+            mensaje2 += `
+            Nombre: ${juego.nombre}
+            Precio: ${juego.precio} USD
+            Tamaño: ${juego.pesogb} gb
+            `;
+        });
+        alert(`
+        los Juegos Recomendados para ti:
+        ${mensaje2}
+        `);
+
+        let tipojue = prompt("ingresa el juego que escogiste. Recuerda => call of duty, god of war, overwatch, fifa23, evilwest, spiderman, Escibe ESC para salir");
         alert("recuerda que el impuesto es del 19% al precio publicado");
 
         while (tipojue != "ESC") {
@@ -112,8 +182,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Juego Call Of Duty es de 200 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 30 USD");
 
                     let decisioncod = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto1 = 200;
-                    let descuento1 = 30;
+                    let precioProducto1 = juegosStock[0].precio;
+                    let descuento1 = juegosStock[0].descuento;
 
                     if (decisioncod.toUpperCase() === "SI") {
 
@@ -134,8 +204,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Juego god of war es de 190 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 28 USD");
 
                     let decisiongod = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto2 = 190;
-                    let descuento2 = 28;
+                    let precioProducto2 = juegosStock[1].precio;
+                    let descuento2 = juegosStock[1].descuento;
 
                     if (decisiongod.toUpperCase() === "SI") {
 
@@ -156,8 +226,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Juego overeatch es de 220 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 35 USD");
 
                     let decisionove = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto3 = 220;
-                    let descuento3 = 35;
+                    let precioProducto3 = juegosStock[2].precio;
+                    let descuento3 = juegosStock[2].descuento;
 
                     if (decisionove.toUpperCase() === "SI") {
 
@@ -179,8 +249,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Juego FIFA23 es de 250 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 40 USD");
 
                     let decisionfif = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto4 = 250;
-                    let descuento4 = 40;
+                    let precioProducto4 = juegosStock[3].precio;
+                    let descuento4 = juegosStock[3].descuento;
 
                     if (decisionfif.toUpperCase() === "SI") {
 
@@ -201,8 +271,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Juego Evilwest es de 150 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 18 USD");
 
                     let decisionevi = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto5 = 150;
-                    let descuento5 = 18;
+                    let precioProducto5 = juegosStock[4].precio;
+                    let descuento5 = juegosStock[4].descuento;
 
                     if (decisionevi.toUpperCase() === "SI") {
 
@@ -223,8 +293,8 @@ if (isNaN(nombre)) {
                     alert("El precio del Juego Spiderman es de 280 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 60 USD");
 
                     let decisionspi = prompt("Digita, si o no quieres comprarlo ya mismo");
-                    let precioProducto6 = 280;
-                    let descuento6 = 60;
+                    let precioProducto6 = juegosStock[5].precio;
+                    let descuento6 = juegosStock[5].descuento;
 
                     if (decisionspi.toUpperCase() === "SI") {
 
