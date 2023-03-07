@@ -58,7 +58,13 @@
 
         <main class="letracolor container estiloletrap">
             <h1><strong> Videojuegos mas recientes</strong></h1>
-            <section class="estiloletranor">
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary" type="button" id="boton1">Ver todo el contenido</button>
+                <button class="btn btn-outline-primary" type="button" id="boton2">Recomendacion segun tu dinero</button>
+                <button class="btn btn-outline-primary" type="button" id="boton3">Averigua en cuanto te sale cada juego</button>
+            </div>
+            <!-- <section class="estiloletranor">
                 <div class="row row-cols-1 row-cols-md-2 g-4">
                     <div class="col">
                         <div class="card h-100 border-danger animate__animated animate__bounceInLeft">
@@ -140,12 +146,21 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
 
                 <br>
 
             </section>
+            <section class="estiloletranor">
+                <div class="row row-cols-1 row-cols-md-2 g-4" id="tienda"></div>
+            </section>
+
+            <section class="estiloletranor">
+                <div class="row row-cols-1 row-cols-md-2 g-4" id="filtro"></div>
+            </section>
+
+            
 
         </main>
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top container">
