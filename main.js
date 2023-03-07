@@ -23,9 +23,9 @@ const suma = (a, b) => a + b;
 const iva = valor => valor * 0.19;
 
 const celularesStock = [
-    { id: 1, nombre: "Apple", precio: 1000, descuento: 200, img: "" , descrip: "" },
-    { id: 2, nombre: "Samsung", precio: 700, descuento: 100, img: "" , descrip: "" },
-    { id: 3, nombre: "Xiaomi", precio: 490, descuento: 70, img: "" , descrip: "" },
+    { id: 1, nombre: "Apple", precio: 1000, descuento: 200, img: "imagenes/iphone-14promax.png" , descrip: "fr" },
+    { id: 2, nombre: "Samsung", precio: 700, descuento: 100, img: "imagenes/galaxyz.png" , descrip: "f" },
+    { id: 3, nombre: "Xiaomi", precio: 490, descuento: 70, img: "imagenes/12t.png" , descrip: "f" },
 ];
 
 const juegosStock = [
@@ -78,6 +78,7 @@ const juegosStock = [
 
 let carrito = [];
 
+
 const tienda = document.getElementById("tienda");
 
 function ponerproductodom(juegosStock, tienda) {
@@ -106,6 +107,42 @@ function ponerproductodom(juegosStock, tienda) {
         })
     });
 };
+
+function agregarproductoscarro(id){
+    alert("producto agregado con exito");
+    
+    let producto = juegosStock.find(producto => producto.id === id);
+    carrito.push(producto);
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+
+};
+
+
+function renderizarCarrito (){
+    let carritohtml = document.getElementById("carrito");
+
+    carritohtml.innerHTML = "";
+
+    carrito.forEach((p) => {
+        let producto = document.createElement("div");
+        producto.classList.add("col");
+
+        producto.innerHTML = `
+        <div class="card h-100 border-danger animate__animated animate__bounceInRight">
+             <img src="${p.img}" class="card-img-top" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title"><strong>${p.nombre}</strong></h5>
+                <p> ${p.precio} USD</p>
+                <p>${p.descuento} USD</p>
+            </div>
+        </div>
+        `;
+
+        carritohtml.appendChild(producto);
+
+    });
+}
 
 let boton1 = document.getElementById("boton1");
 boton1.addEventListener("click", () => {
@@ -319,12 +356,32 @@ boton3.addEventListener("click", () => {
         }
 
         tipojue = prompt("ingresa el juego que escogiste. Disponibles => call of duty, god of war, overwatch, fifa23, evilwest, spiderman. O presiona ESC para salir");
-    }
-})
+    };
+});
 
-let botonce = document.getElementById("botoncel");
-botonce.addEventListener("click", () => {
 
+
+let boton4 = document.getElementById("boton4");
+boton4.addEventListener("click", () => {
+    tienda.innerHTML = "";
+    
+
+    renderizarCarrito();
+});
+
+
+let boton5 = document.getElementById("borrar");
+boton5.addEventListener("click", () => {
+    alert("carrito eliminado");
+    carritohtml.innerHTML = "";
+   localStorage.clear();
+});
+
+
+let botoncel = document.getElementById("botoncel");
+botoncel.addEventListener("click,", () => {
+
+    
     let mensaje = "";
     celularesStock.forEach(celular => {
         mensaje += `
