@@ -23,9 +23,9 @@ const suma = (a, b) => a + b;
 const iva = valor => valor * 0.19;
 
 const celularesStock = [
-    { id: 1, nombre: "Apple", precio: 1000, descuento: 200, img: "imagenes/iphone-14promax.png" , descrip: "fr" },
-    { id: 2, nombre: "Samsung", precio: 700, descuento: 100, img: "imagenes/galaxyz.png" , descrip: "f" },
-    { id: 3, nombre: "Xiaomi", precio: 490, descuento: 70, img: "imagenes/12t.png" , descrip: "f" },
+    { id: 1, nombre: "Apple", precio: 1000, descuento: 200, img: "imagenes/iphone-14promax.png", descrip: "" },
+    { id: 2, nombre: "Samsung", precio: 700, descuento: 100, img: "imagenes/galaxyz.png", descrip: "" },
+    { id: 3, nombre: "Xiaomi", precio: 490, descuento: 70, img: "imagenes/12t.png", descrip: "" },
 ];
 
 const juegosStock = [
@@ -80,7 +80,11 @@ let carrito = [];
 
 
 const tienda = document.getElementById("tienda");
+const filt = document.getElementById("filtro");
+const carritohtml = document.getElementById("carrito");
+const carritoStorage = localStorage.getItem("carrito");
 
+console.log(carritoStorage);
 function ponerproductodom(juegosStock, tienda) {
     juegosStock.forEach((p) => {
         let producto = document.createElement("div");
@@ -92,8 +96,8 @@ function ponerproductodom(juegosStock, tienda) {
             <div class="card-body">
                 <h5 class="card-title"><strong>${p.nombre}</strong></h5>
                 <p class="card-text">${p.descrip}</p>
-                <p> ${p.precio} USD</p>
-                <p>${p.descuento} USD</p>
+                <p>Precio: ${p.precio} USD</p>
+                <p>Descuento: ${p.descuento} USD</p>
                 <p>${p.pesogb} Peso GB</p>
                 <button class="buttoncompra" id="${p.id}">Añadir al carrito</button>
             </div>
@@ -108,9 +112,9 @@ function ponerproductodom(juegosStock, tienda) {
     });
 };
 
-function agregarproductoscarro(id){
+function agregarproductoscarro(id) {
     alert("producto agregado con exito");
-    
+
     let producto = juegosStock.find(producto => producto.id === id);
     carrito.push(producto);
 
@@ -119,8 +123,8 @@ function agregarproductoscarro(id){
 };
 
 
-function renderizarCarrito (){
-    let carritohtml = document.getElementById("carrito");
+function renderizarCarrito() {
+    
 
     carritohtml.innerHTML = "";
 
@@ -133,8 +137,8 @@ function renderizarCarrito (){
              <img src="${p.img}" class="card-img-top" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title"><strong>${p.nombre}</strong></h5>
-                <p> ${p.precio} USD</p>
-                <p>${p.descuento} USD</p>
+                <p>Precio: ${p.precio} USD</p>
+                <p>Descuento: ${p.descuento} USD</p>
             </div>
         </div>
         `;
@@ -147,12 +151,16 @@ function renderizarCarrito (){
 let boton1 = document.getElementById("boton1");
 boton1.addEventListener("click", () => {
     tienda.innerHTML = "";
+    filt.innerHTML = "";
+    carritohtml.innerHTML = "";
     ponerproductodom(juegosStock, tienda);
 });
 
 let boton2 = document.getElementById("boton2");
 boton2.addEventListener("click", () => {
     tienda.innerHTML = "";
+    filt.innerHTML = "";
+    carritohtml.innerHTML = "";
 
     let mensaje = "";
     juegosStock.forEach(juego => {
@@ -168,18 +176,20 @@ boton2.addEventListener("click", () => {
 
     let dineroDisponible2 = parseInt(prompt("Con cuanto dinero dispones? te recomendamos tus mejores opciones"));
 
-    const filt = document.getElementById("filtro");
 
     let recomendacion;
 
     if (dineroDisponible2 > 150) {
         let filtrados2 = juegosStock.filter(juego => juego.precio < dineroDisponible2);
         let mensaje2 = "";
+        recomendacion = document.createElement("div");
+        recomendacion.classList.add("col");
+        recomendacion.innerHTML = "<h1><strong> Te podemos recomendar</strong></h1>"
+        filt.append(recomendacion);
+        ponerproductodom(filtrados2, tienda);
+
         filtrados2.forEach((juego) => {
-            recomendacion = document.createElement("div");
-            recomendacion.classList.add("col");
-            tienda.innerHTML = "";
-            ponerproductodom(filtrados2, tienda);
+            
 
             mensaje2 += `
         Nombre: ${juego.nombre}
@@ -211,6 +221,9 @@ let boton3 = document.getElementById("boton3");
 boton3.addEventListener("click", () => {
 
     tienda.innerHTML = "";
+    filt.innerHTML = "";
+    carritohtml.innerHTML = "";
+
     let tipojue = prompt("ingresa el juego que escogiste. Recuerda => call of duty, god of war, overwatch, fifa23, evilwest, spiderman, Escibe ESC para salir");
     alert("recuerda que el impuesto es del 19% al precio publicado");
 
@@ -364,50 +377,36 @@ boton3.addEventListener("click", () => {
 let boton4 = document.getElementById("boton4");
 boton4.addEventListener("click", () => {
     tienda.innerHTML = "";
-    
+    filt.innerHTML = "";
+    carritohtml.innerHTML = "";
 
-    renderizarCarrito();
+    if(carritoStorage){
+        carrito = JSON.parse(carritoStorage);
+        renderizarCarrito();
+    }else{
+        let recomendacion2 = document.createElement("div");
+        recomendacion2.classList.add("col");
+        recomendacion2.innerHTML = "<h1><strong> No hay nada en el carrito</strong></h1>"
+        carritohtml.append(recomendacion2);
+    }
+    
 });
 
 
 let boton5 = document.getElementById("borrar");
 boton5.addEventListener("click", () => {
     alert("carrito eliminado");
+    tienda.innerHTML = "";
+    filt.innerHTML = "";
     carritohtml.innerHTML = "";
-   localStorage.clear();
+    localStorage.clear();
+    
 });
 
 
 let botoncel = document.getElementById("botoncel");
-botoncel.addEventListener("click,", () => {
-
-    
-    let mensaje = "";
-    celularesStock.forEach(celular => {
-        mensaje += `
-      ID: ${celular.id}
-      Nombre: ${celular.nombre}
-      `;
-    });
-    alert(`
-    Celulares disponibles:
-    ${mensaje}
-    `);
-
-    let dineroDisponible = parseInt(prompt("Con cuanto dinero dispones? te recomendamos tus mejores opciones"));
-    let filtrados = celularesStock.filter(celu => celu.precio < dineroDisponible);
-    let mensaje2 = "";
-    filtrados.forEach((celu) => {
-        mensaje2 += `
-        ID: ${celu.id}
-        Nombre: ${celu.nombre}
-        Precio: ${celu.precio} USD
-        `;
-    });
-    alert(`
-    Celulares Recomendados para ti:
-    ${mensaje2}
-    `);
+botoncel.addEventListener("click", () => {
+    tienda.innerHTML = "";
 
 
     let tipocel = prompt("ingrese la marca de celular que escogiste, Escibe ESC para salir");
@@ -492,3 +491,36 @@ botoncel.addEventListener("click,", () => {
     }
 
 });
+
+
+
+
+
+
+
+// let mensaje = "";
+// celularesStock.forEach(celular => {
+//     mensaje += `
+//   ID: ${celular.id}
+//   Nombre: ${celular.nombre}
+//   `;
+// });
+// alert(`
+// Celulares disponibles:
+// ${mensaje}
+// `);
+
+// let dineroDisponible = parseInt(prompt("Con cuanto dinero dispones? te recomendamos tus mejores opciones"));
+// let filtrados = celularesStock.filter(celu => celu.precio < dineroDisponible);
+// let mensaje2 = "";
+// filtrados.forEach((celu) => {
+//     mensaje2 += `
+//     ID: ${celu.id}
+//     Nombre: ${celu.nombre}
+//     Precio: ${celu.precio} USD
+//     `;
+// });
+// alert(`
+// Celulares Recomendados para ti:
+// ${mensaje2}
+// `);
