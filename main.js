@@ -76,13 +76,19 @@ const juegosStock = [
 ];
 
 
-let carrito = [];
 
 
 const tienda = document.getElementById("tienda");
 const filt = document.getElementById("filtro");
 const carritohtml = document.getElementById("carrito");
 const carritoStorage = localStorage.getItem("carrito");
+const mensajefitl = document.getElementById("filtro2");
+
+if (carritoStorage) {
+    carrito = JSON.parse(carritoStorage);
+} else {
+    carrito = [];
+}
 
 console.log(carritoStorage);
 function ponerproductodom(juegosStock, tienda) {
@@ -123,30 +129,30 @@ function agregarproductoscarro(id) {
 };
 
 
-function renderizarCarrito() {
-    
+// function renderizarCarrito() {
 
-    carritohtml.innerHTML = "";
 
-    carrito.forEach((p) => {
-        let producto = document.createElement("div");
-        producto.classList.add("col");
+//     carritohtml.innerHTML = "";
 
-        producto.innerHTML = `
-        <div class="card h-100 border-danger animate__animated animate__bounceInRight">
-             <img src="${p.img}" class="card-img-top" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><strong>${p.nombre}</strong></h5>
-                <p>Precio: ${p.precio} USD</p>
-                <p>Descuento: ${p.descuento} USD</p>
-            </div>
-        </div>
-        `;
+//     carrito.forEach((p) => {
+//         let producto = document.createElement("div");
+//         producto.classList.add("col");
 
-        carritohtml.appendChild(producto);
+//         producto.innerHTML = `
+//         <div class="card h-100 border-danger animate__animated animate__bounceInRight">
+//              <img src="${p.img}" class="card-img-top" alt="Card image cap">
+//             <div class="card-body">
+//                 <h5 class="card-title"><strong>${p.nombre}</strong></h5>
+//                 <p>Precio: ${p.precio} USD</p>
+//                 <p>Descuento: ${p.descuento} USD</p>
+//             </div>
+//         </div>
+//         `;
 
-    });
-}
+//         carritohtml.append(producto);
+
+//     });
+// }
 
 let boton1 = document.getElementById("boton1");
 boton1.addEventListener("click", () => {
@@ -161,6 +167,7 @@ boton2.addEventListener("click", () => {
     tienda.innerHTML = "";
     filt.innerHTML = "";
     carritohtml.innerHTML = "";
+    mensajefitl.innerHTML = "";
 
     let mensaje = "";
     juegosStock.forEach(juego => {
@@ -180,16 +187,16 @@ boton2.addEventListener("click", () => {
     let recomendacion;
 
     if (dineroDisponible2 > 150) {
-        let filtrados2 = juegosStock.filter(juego => juego.precio < dineroDisponible2);
+        let filtrados2 = juegosStock.filter(juego => juego.precio <= dineroDisponible2);
         let mensaje2 = "";
         recomendacion = document.createElement("div");
         recomendacion.classList.add("col");
         recomendacion.innerHTML = "<h1><strong> Te podemos recomendar</strong></h1>"
-        filt.append(recomendacion);
-        ponerproductodom(filtrados2, tienda);
+        mensajefitl.append(recomendacion);
+        ponerproductodom(filtrados2, filt);
 
         filtrados2.forEach((juego) => {
-            
+
 
             mensaje2 += `
         Nombre: ${juego.nombre}
@@ -208,11 +215,11 @@ boton2.addEventListener("click", () => {
         recomendacion.innerHTML = `
         <div class="card h-100 border-danger animate__animated animate__bounceInRight">
             <div class="card-body">
-                Con tu dinero, no te alcanza para ningun juego
+            <h1><strong>Con tu dinero, no te alcanza para ningun juego</strong></h1>
             </div>
         </div>
         `;
-        filt.append(recomendacion);
+        mensajefitl.append(recomendacion);
     };
 
 });
@@ -374,33 +381,44 @@ boton3.addEventListener("click", () => {
 
 
 
-let boton4 = document.getElementById("boton4");
-boton4.addEventListener("click", () => {
+let botonCarrito = document.getElementById("boton4");
+botonCarrito.addEventListener("click", () => {
     tienda.innerHTML = "";
     filt.innerHTML = "";
     carritohtml.innerHTML = "";
+    mensajefitl.innerHTML = "";
 
-    if(carritoStorage){
-        carrito = JSON.parse(carritoStorage);
-        renderizarCarrito();
-    }else{
-        let recomendacion2 = document.createElement("div");
-        recomendacion2.classList.add("col");
-        recomendacion2.innerHTML = "<h1><strong> No hay nada en el carrito</strong></h1>"
-        carritohtml.append(recomendacion2);
-    }
-    
+    let carrito = JSON.parse(localStorage.getItem("carrito"));
+
+    carrito.forEach((p) => {
+        let producto = document.createElement("div");
+        producto.classList.add("col");
+
+        producto.innerHTML = `
+        <div class="card h-100 border-danger animate__animated animate__bounceInRight">
+             <img src="${p.img}" class="card-img-top" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title"><strong>${p.nombre}</strong></h5>
+                <p>Precio: ${p.precio} USD</p>
+                <p>Descuento: ${p.descuento} USD</p>
+            </div>
+        </div>
+        `;
+
+        carritohtml.append(producto);
+
+    });
 });
 
 
-let boton5 = document.getElementById("borrar");
-boton5.addEventListener("click", () => {
+let botonborrarcarro = document.getElementById("borrar");
+botonborrarcarro.addEventListener("click", () => {
     alert("carrito eliminado");
     tienda.innerHTML = "";
     filt.innerHTML = "";
     carritohtml.innerHTML = "";
     localStorage.clear();
-    
+
 });
 
 
@@ -524,3 +542,16 @@ botoncel.addEventListener("click", () => {
 // Celulares Recomendados para ti:
 // ${mensaje2}
 // `);
+
+
+
+
+// if (carritoStorage) {
+//         carrito = JSON.parse(carritoStorage);
+//         renderizarCarrito();
+//     } else {
+//         let recomendacion2 = document.createElement("div");
+//         recomendacion2.classList.add("col");
+//         recomendacion2.innerHTML = "<h1><strong> No hay nada en el carrito</strong></h1>"
+//         mensajefitl.append(recomendacion2);
+//     }
