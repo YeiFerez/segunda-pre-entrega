@@ -84,11 +84,11 @@ const carritohtml = document.getElementById("carrito");
 const carritoStorage = localStorage.getItem("carrito");
 const mensajefitl = document.getElementById("filtro2");
 
-if (carritoStorage) {
+if(carritoStorage){
     carrito = JSON.parse(carritoStorage);
-} else {
+}else{
     carrito = [];
-}
+};
 
 console.log(carritoStorage);
 function ponerproductodom(juegosStock, tienda) {
@@ -129,30 +129,30 @@ function agregarproductoscarro(id) {
 };
 
 
-// function renderizarCarrito() {
+function renderizarCarrito() {
 
 
-//     carritohtml.innerHTML = "";
+    carritohtml.innerHTML = "";
 
-//     carrito.forEach((p) => {
-//         let producto = document.createElement("div");
-//         producto.classList.add("col");
+    carrito.forEach((p) => {
+        let producto = document.createElement("div");
+        producto.classList.add("col");
 
-//         producto.innerHTML = `
-//         <div class="card h-100 border-danger animate__animated animate__bounceInRight">
-//              <img src="${p.img}" class="card-img-top" alt="Card image cap">
-//             <div class="card-body">
-//                 <h5 class="card-title"><strong>${p.nombre}</strong></h5>
-//                 <p>Precio: ${p.precio} USD</p>
-//                 <p>Descuento: ${p.descuento} USD</p>
-//             </div>
-//         </div>
-//         `;
+        producto.innerHTML = `
+        <div class="card h-100 border-danger animate__animated animate__bounceInRight">
+             <img src="${p.img}" class="card-img-top" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title"><strong>${p.nombre}</strong></h5>
+                <p>Precio: ${p.precio} USD</p>
+                <p>Descuento: ${p.descuento} USD</p>
+            </div>
+        </div>
+        `;
 
-//         carritohtml.append(producto);
+        carritohtml.append(producto);
 
-//     });
-// }
+    });
+}
 
 let boton1 = document.getElementById("boton1");
 boton1.addEventListener("click", () => {
@@ -390,11 +390,12 @@ botonCarrito.addEventListener("click", () => {
 
     let carrito = JSON.parse(localStorage.getItem("carrito"));
 
-    carrito.forEach((p) => {
-        let producto = document.createElement("div");
-        producto.classList.add("col");
+    if (carrito) {
+        carrito.forEach((p) => {
+            let producto = document.createElement("div");
+            producto.classList.add("col");
 
-        producto.innerHTML = `
+            producto.innerHTML = `
         <div class="card h-100 border-danger animate__animated animate__bounceInRight">
              <img src="${p.img}" class="card-img-top" alt="Card image cap">
             <div class="card-body">
@@ -405,9 +406,17 @@ botonCarrito.addEventListener("click", () => {
         </div>
         `;
 
-        carritohtml.append(producto);
+            carritohtml.append(producto);
 
-    });
+        });
+    } else {
+        let recomendacion2 = document.createElement("div");
+        recomendacion2.classList.add("col");
+        recomendacion2.innerHTML = "<h1><strong> No hay nada en el carrito</strong></h1>"
+        mensajefitl.append(recomendacion2);
+    }
+
+
 });
 
 
