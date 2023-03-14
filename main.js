@@ -390,25 +390,11 @@ botonCarrito.addEventListener("click", () => {
 
     let carrito = JSON.parse(localStorage.getItem("carrito"));
 
+    renderizarCarrito()
+
     if (carrito) {
-        carrito.forEach((p) => {
-            let producto = document.createElement("div");
-            producto.classList.add("col");
-
-            producto.innerHTML = `
-        <div class="card h-100 border-danger animate__animated animate__bounceInRight">
-             <img src="${p.img}" class="card-img-top" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><strong>${p.nombre}</strong></h5>
-                <p>Precio: ${p.precio} USD</p>
-                <p>Descuento: ${p.descuento} USD</p>
-            </div>
-        </div>
-        `;
-
-            carritohtml.append(producto);
-
-        });
+        renderizarCarrito()
+        
     } else {
         let recomendacion2 = document.createElement("div");
         recomendacion2.classList.add("col");
@@ -426,6 +412,7 @@ botonborrarcarro.addEventListener("click", () => {
     tienda.innerHTML = "";
     filt.innerHTML = "";
     carritohtml.innerHTML = "";
+    carrito = [];
     localStorage.clear();
 
 });
