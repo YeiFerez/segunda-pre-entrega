@@ -1,22 +1,39 @@
 
+Swal.fire({
+    title: 'Bienvenido!',
+    text: 'Esta es la mejor pagina, donde podras comprar tu celular y los ultimos juegos para consolas',
+    imageUrl: src = "imagenes/logoUT.jpg",
+    imageWidth: 400,
+    imageHeight: 200,
+    imageAlt: 'Custom image',
+    showClass: {
+    popup: 'animate__animated animate__fadeInDown'
+    },
+    hideClass: {
+    popup: 'animate__animated animate__fadeOutUp'
+    }
+    }).then(() => {
+    let usuario;
+    let usuarioStorage = sessionStorage.getItem("usuario");
+    usuarioStorage ? (
+        usuario = usuarioStorage, 
+        Swal.fire(`Bienvenido ${usuario}`)
+    ) : (
+        Swal.fire({
+            title: 'Ingrese el usuario',
+            input: 'text',
+            showCancelButton: false,
+            confirmButtonText: 'Guardar',
+        }).then((result) => {
+            if (result.value) {
+                usuario = result.value;
+                sessionStorage.setItem("usuario", usuario);
+                Swal.fire(`Eres nuevo, Bienvenido ${usuario}`);
+            }
+        })
+    );
+});    
 
-
-alert("Bienvenido a la mejor pagina donde podras comprar tu celular y los ultimos juegos para consolas")
-
-let usuario;
-
-let usuarioStorage = sessionStorage.getItem("usuario");
-
-if (usuarioStorage) {
-    usuario = usuarioStorage;
-    alert(`Bienvenido ${usuario}`);
-
-
-} else {
-    usuario = prompt("Ingrese el usuario");
-    sessionStorage.setItem("usuario", usuario);
-    alert("Eres nuevo, Bienvenido");
-}
 
 const resta = (a, b) => a - b;
 const suma = (a, b) => a + b;
@@ -76,17 +93,15 @@ const juegosStock = [
 ];
 
 
-
-
 const tienda = document.getElementById("tienda");
 const filt = document.getElementById("filtro");
 const carritohtml = document.getElementById("carrito");
 const carritoStorage = localStorage.getItem("carrito");
 const mensajefitl = document.getElementById("filtro2");
 
-if(carritoStorage){
+if (carritoStorage) {
     carrito = JSON.parse(carritoStorage);
-}else{
+} else {
     carrito = [];
 };
 
@@ -119,7 +134,13 @@ function ponerproductodom(juegosStock, tienda) {
 };
 
 function agregarproductoscarro(id) {
-    alert("producto agregado con exito");
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Tu producto a sido añadido con exito',
+        showConfirmButton: false,
+        timer: 1500
+    })
 
     let producto = juegosStock.find(producto => producto.id === id);
     carrito.push(producto);
@@ -168,61 +189,62 @@ boton2.addEventListener("click", () => {
     filt.innerHTML = "";
     carritohtml.innerHTML = "";
     mensajefitl.innerHTML = "";
-
-    let mensaje = "";
-    juegosStock.forEach(juego => {
-        mensaje += `
-        ID: ${juego.id}
-      Nombre: ${juego.nombre}
-      `;
+    Swal.fire({
+        title: '¿Con cuánto dinero dispones? Te recomendamos tus mejores opciones',
+        input: 'number',
+        inputAttributes: {
+            min: 0
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Buscar',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let dineroDisponible2 = parseInt(result.value);
+            let recomendacion;
+            if (dineroDisponible2 > 150) {
+                let filtrados2 = juegosStock.filter(juego => juego.precio <= dineroDisponible2);
+                let mensaje2 = "";
+                recomendacion = document.createElement("div");
+                recomendacion.classList.add("col");
+                recomendacion.innerHTML = "<h1><strong> Te podemos recomendar</strong></h1>"
+                mensajefitl.append(recomendacion);
+                ponerproductodom(filtrados2, filt);
+                filtrados2.forEach((juego) => {
+                    mensaje2 += `
+                        Nombre: ${juego.nombre}
+                        Precio: ${juego.precio} USD
+                        Tamaño: ${juego.pesogb} gb
+                    `;
+                });
+                Swal.fire({
+                    title: 'Los juegos recomendados para ti:',
+                    text: mensaje2,
+                    icon: 'success',
+                });
+            } else if (dineroDisponible2 > 0) {
+                recomendacion = document.createElement("div");
+                recomendacion.classList.add("col");
+                tienda.innerHTML = "";
+                recomendacion.innerHTML = `
+                    <div class="card h-100 border-danger animate__animated animate__bounceInRight">
+                        <div class="card-body">
+                        <h1><strong>Con tu dinero, no te alcanza para ningun juego</strong></h1>
+                        </div>
+                    </div>
+                `;
+                mensajefitl.append(recomendacion);
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ingrese un valor válido',
+                    icon: 'error',
+                });
+            }
+        }
     });
-    alert(`
-    Juegos disponibles:
-    ${mensaje}
-    `);
-
-    let dineroDisponible2 = parseInt(prompt("Con cuanto dinero dispones? te recomendamos tus mejores opciones"));
-
-
-    let recomendacion;
-
-    if (dineroDisponible2 > 150) {
-        let filtrados2 = juegosStock.filter(juego => juego.precio <= dineroDisponible2);
-        let mensaje2 = "";
-        recomendacion = document.createElement("div");
-        recomendacion.classList.add("col");
-        recomendacion.innerHTML = "<h1><strong> Te podemos recomendar</strong></h1>"
-        mensajefitl.append(recomendacion);
-        ponerproductodom(filtrados2, filt);
-
-        filtrados2.forEach((juego) => {
-
-
-            mensaje2 += `
-        Nombre: ${juego.nombre}
-        Precio: ${juego.precio} USD
-        Tamaño: ${juego.pesogb} gb
-        `;
-        });
-        alert(`
-    los Juegos Recomendados para ti:
-    ${mensaje2}
-    `);
-    } else {
-        recomendacion = document.createElement("div");
-        recomendacion.classList.add("col");
-        tienda.innerHTML = "";
-        recomendacion.innerHTML = `
-        <div class="card h-100 border-danger animate__animated animate__bounceInRight">
-            <div class="card-body">
-            <h1><strong>Con tu dinero, no te alcanza para ningun juego</strong></h1>
-            </div>
-        </div>
-        `;
-        mensajefitl.append(recomendacion);
-    };
-
 });
+
 
 let boton3 = document.getElementById("boton3");
 boton3.addEventListener("click", () => {
@@ -394,7 +416,7 @@ botonCarrito.addEventListener("click", () => {
 
     if (carrito) {
         renderizarCarrito()
-        
+
     } else {
         let recomendacion2 = document.createElement("div");
         recomendacion2.classList.add("col");
@@ -408,12 +430,28 @@ botonCarrito.addEventListener("click", () => {
 
 let botonborrarcarro = document.getElementById("borrar");
 botonborrarcarro.addEventListener("click", () => {
-    alert("carrito eliminado");
-    tienda.innerHTML = "";
-    filt.innerHTML = "";
-    carritohtml.innerHTML = "";
-    carrito = [];
-    localStorage.clear();
+
+
+    Swal.fire({
+        title: "Está seguro de eliminar el carrito?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, seguro",
+        cancelButtonText: "No, no quiero",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            tienda.innerHTML = "";
+            filt.innerHTML = "";
+            carritohtml.innerHTML = "";
+            carrito = [];
+            localStorage.clear();
+            Swal.fire({
+                title: "Borrado!",
+                icon: "success",
+                text: "El carrito ha sido borrado",
+            });
+        }
+    });
 
 });
 
@@ -551,3 +589,96 @@ botoncel.addEventListener("click", () => {
 //         recomendacion2.innerHTML = "<h1><strong> No hay nada en el carrito</strong></h1>"
 //         mensajefitl.append(recomendacion2);
 //     }
+
+
+
+
+
+// let boton2 = document.getElementById("boton2");
+// boton2.addEventListener("click", () => {
+//     tienda.innerHTML = "";
+//     filt.innerHTML = "";
+//     carritohtml.innerHTML = "";
+//     mensajefitl.innerHTML = "";
+
+//     // let mensaje = "";
+//     // juegosStock.forEach(juego => {
+//     //     mensaje += `
+//     //     ID: ${juego.id}
+//     //   Nombre: ${juego.nombre}
+//     //   `;
+//     // });
+//     // alert(`
+//     // Juegos disponibles:
+//     // ${mensaje}
+//     // `);
+    
+
+//     let dineroDisponible2 = parseInt(prompt("Con cuanto dinero dispones? te recomendamos tus mejores opciones"));
+
+
+//     let recomendacion;
+
+
+
+//     if (dineroDisponible2 > 150) {
+//         let filtrados2 = juegosStock.filter(juego => juego.precio <= dineroDisponible2);
+//         let mensaje2 = "";
+//         recomendacion = document.createElement("div");
+//         recomendacion.classList.add("col");
+//         recomendacion.innerHTML = "<h1><strong> Te podemos recomendar</strong></h1>"
+//         mensajefitl.append(recomendacion);
+//         ponerproductodom(filtrados2, filt);
+
+//         filtrados2.forEach((juego) => {
+
+
+//             mensaje2 += `
+//         Nombre: ${juego.nombre}
+//         Precio: ${juego.precio} USD
+//         Tamaño: ${juego.pesogb} gb
+//         `;
+//         });
+//         Swal.fire(`
+//     los Juegos Recomendados para ti:
+//     ${mensaje2}
+//     `);
+//     } else if (dineroDisponible2 > 0) {
+//         recomendacion = document.createElement("div");
+//         recomendacion.classList.add("col");
+//         tienda.innerHTML = "";
+//         recomendacion.innerHTML = `
+//         <div class="card h-100 border-danger animate__animated animate__bounceInRight">
+//             <div class="card-body">
+//             <h1><strong>Con tu dinero, no te alcanza para ningun juego</strong></h1>
+//             </div>
+//         </div>
+//         `;
+//         mensajefitl.append(recomendacion);
+//     };
+
+// });
+
+
+// Swal.fire({
+//     title: 'Bienvenido!',
+//     text: 'Esta es la mejor pagina, donde podras comprar tu celular y los ultimos juegos para consolas',
+//     imageUrl: src = "imagenes/logoUT.jpg",
+//     imageWidth: 400,
+//     imageHeight: 200,
+//     imageAlt: 'Custom image',
+//     showClass: {
+//         popup: 'animate__animated animate__fadeInDown'
+//     },
+//     hideClass: {
+//         popup: 'animate__animated animate__fadeOutUp'
+//     }
+// })
+
+
+// let usuario;
+// let usuarioStorage = sessionStorage.getItem("usuario");
+
+
+// usuarioStorage ? (usuario = usuarioStorage, alert(`Bienvenido ${usuario}`)
+// ) : usuario = prompt("Ingrese el usuario"), sessionStorage.setItem("usuario", usuario), alert("Eres nuevo, Bienvenido");
