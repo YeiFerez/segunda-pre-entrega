@@ -105,6 +105,7 @@ if (carritoStorage) {
     carrito = [];
 };
 
+
 console.log(carritoStorage);
 function ponerproductodom(juegosStock, tienda) {
     juegosStock.forEach((p) => {
@@ -183,6 +184,8 @@ boton1.addEventListener("click", () => {
     ponerproductodom(juegosStock, tienda);
 });
 
+
+
 let boton2 = document.getElementById("boton2");
 boton2.addEventListener("click", () => {
     tienda.innerHTML = "";
@@ -200,27 +203,34 @@ boton2.addEventListener("click", () => {
         cancelButtonText: 'Cancelar',
     }).then((result) => {
         if (result.isConfirmed) {
+            
             let dineroDisponible2 = parseInt(result.value);
             let recomendacion;
             if (dineroDisponible2 > 150) {
-                let filtrados2 = juegosStock.filter(juego => juego.precio <= dineroDisponible2);
-                let mensaje2 = "";
-                recomendacion = document.createElement("div");
-                recomendacion.classList.add("col");
-                recomendacion.innerHTML = "<h1><strong> Te podemos recomendar</strong></h1>"
-                mensajefitl.append(recomendacion);
-                ponerproductodom(filtrados2, filt);
-                filtrados2.forEach((juego) => {
-                    mensaje2 += `
-                        Nombre: ${juego.nombre}
-                        Precio: ${juego.precio} USD
-                        Tamaño: ${juego.pesogb} gb
-                    `;
-                });
-                Swal.fire({
-                    title: 'Los juegos recomendados para ti:',
-                    text: mensaje2,
-                    icon: 'success',
+
+                fetch("./data.json") 
+                .then((response) => response.json())
+                .then((response) => {
+
+                    let filtrados2 = response.filter(juego => juego.precio <= dineroDisponible2);
+                    let mensaje2 = "";
+                    recomendacion = document.createElement("div");
+                    recomendacion.classList.add("col");
+                    recomendacion.innerHTML = "<h1><strong> Te podemos recomendar</strong></h1>"
+                    mensajefitl.append(recomendacion);
+                    ponerproductodom(filtrados2, filt);
+                    filtrados2.forEach((juego) => {
+                        mensaje2 += `
+                            Nombre: ${juego.nombre}
+                            Precio: ${juego.precio} USD
+                            Tamaño: ${juego.pesogb} gb
+                        `;
+                    });
+                    Swal.fire({
+                        title: 'Los juegos recomendados para ti:',
+                        text: mensaje2,
+                        icon: 'success',
+                    });
                 });
             } else if (dineroDisponible2 > 0) {
                 recomendacion = document.createElement("div");
@@ -253,152 +263,94 @@ boton3.addEventListener("click", () => {
     filt.innerHTML = "";
     carritohtml.innerHTML = "";
 
-    let tipojue = prompt("ingresa el juego que escogiste. Recuerda => call of duty, god of war, overwatch, fifa23, evilwest, spiderman, Escibe ESC para salir");
+    // let tipojue = prompt("ingresa el juego que escogiste. Recuerda => call of duty, god of war, overwatch, fifa23, evilwest, spiderman, Escibe ESC para salir");
     alert("recuerda que el impuesto es del 19% al precio publicado");
-
-    while (tipojue != "ESC") {
-        switch (tipojue) {
+    function calcularPrecio(decision, precioProducto, descuento) {
+        let nuevoPrecio = resta(suma(precioProducto, iva(precioProducto)), descuento);
+        Swal.fire(`El precio del producto te queda en: ${nuevoPrecio} USD`);
+      }
+      
+      function mostrarPrecioBase(precioProducto) {
+        let precioBase = suma(precioProducto, iva(precioProducto));
+        Swal.fire(`El precio del producto te queda en: ${precioBase} USD`);
+      }
+      
+      function comprarJuego(juego) {
+        let precioProducto = juego.precio;
+        let descuento = juego.descuento;
+      
+        Swal.fire({
+          title: `El precio del Juego ${juego.nombre} es de ${precioProducto} USD más impuestos, pero si lo compras ya mismo tendrás un descuento de ${descuento} USD`,
+          input: 'select',
+          inputOptions: {
+            'SI': 'Sí',
+            'NO': 'No'
+          },
+          inputPlaceholder: 'Selecciona una opción',
+          showCancelButton: true
+        }).then((result) => {
+          if (result.value === 'SI') {
+            calcularPrecio(result.value, precioProducto, descuento);
+          } else if (result.value === 'NO') {
+            mostrarPrecioBase(precioProducto);
+          } else {
+            Swal.fire("No digitaste si o no");
+          }
+        });
+      }
+      
+      function seleccionarJuego() {
+        Swal.fire({
+          title: 'Ingresa el juego que escogiste',
+          input: 'select',
+          inputOptions: {
+            'call of duty': 'Call of Duty',
+            'god of war': 'God of War',
+            'overwatch': 'Overwatch',
+            'fifa23': 'FIFA 23',
+            'evilwest': 'Evil West',
+            'spiderman': 'Spiderman',
+            'ESC': 'Salir'
+          },
+          inputPlaceholder: 'Selecciona un juego',
+          showCancelButton: false
+        }).then((result) => {
+            fetch("./data.json") 
+                .then((response) => response.json())
+                .then((response) => {
+          switch (result.value) {
             case "call of duty":
-
-                alert("El precio del Juego Call Of Duty es de 200 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 30 USD");
-
-                let decisioncod = prompt("Digita, si o no quieres comprarlo ya mismo");
-                let precioProducto1 = juegosStock[0].precio;
-                let descuento1 = juegosStock[0].descuento;
-
-                if (decisioncod.toUpperCase() === "SI") {
-
-                    let nuevoPrecio = resta(suma(precioProducto1, iva(precioProducto1)), descuento1);
-                    alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
-
-                } else if (decisioncod.toUpperCase() === "NO") {
-
-                    let precioBase = suma(precioProducto1, iva(precioProducto1));
-                    alert(`el precio del producto te queda en: ${precioBase} USD`);
-
-                } else {
-                    alert("no digistaste si o no");
-                }
-                break;
-
+              comprarJuego(response[0]);
+              break;
             case "god of war":
-                alert("El precio del Juego god of war es de 190 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 28 USD");
-
-                let decisiongod = prompt("Digita, si o no quieres comprarlo ya mismo");
-                let precioProducto2 = juegosStock[1].precio;
-                let descuento2 = juegosStock[1].descuento;
-
-                if (decisiongod.toUpperCase() === "SI") {
-
-                    let nuevoPrecio = resta(suma(precioProducto2, iva(precioProducto2)), descuento2);
-                    alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
-
-                } else if (decisiongod.toUpperCase() === "NO") {
-
-                    let precioBase = suma(precioProducto2, iva(precioProducto2));
-                    alert(`el precio del producto te queda en: ${precioBase} USD`);
-
-                } else {
-                    alert("no digistaste si o no");
-                }
-                break;
-
+              comprarJuego(response[1]);
+              break;
             case "overwatch":
-                alert("El precio del Juego overeatch es de 220 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 35 USD");
-
-                let decisionove = prompt("Digita, si o no quieres comprarlo ya mismo");
-                let precioProducto3 = juegosStock[2].precio;
-                let descuento3 = juegosStock[2].descuento;
-
-                if (decisionove.toUpperCase() === "SI") {
-
-                    let nuevoPrecio = resta(suma(precioProducto3, iva(precioProducto3)), descuento3);
-                    alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
-
-                } else if (decisionove.toUpperCase() === "NO") {
-
-                    let precioBase = suma(precioProducto3, iva(precioProducto3));
-                    alert(`el precio del producto te queda en: ${precioBase} USD`);
-
-                } else {
-                    alert("no digistaste si o no");
-                }
-
-                break;
-
+              comprarJuego(response[2]);
+              break;
             case "fifa23":
-                alert("El precio del Juego FIFA23 es de 250 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 40 USD");
-
-                let decisionfif = prompt("Digita, si o no quieres comprarlo ya mismo");
-                let precioProducto4 = juegosStock[3].precio;
-                let descuento4 = juegosStock[3].descuento;
-
-                if (decisionfif.toUpperCase() === "SI") {
-
-                    let nuevoPrecio = resta(suma(precioProducto4, iva(precioProducto4)), descuento4);
-                    alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
-
-                } else if (decisionfif.toUpperCase() === "NO") {
-
-                    let precioBase = suma(precioProducto4, iva(precioProducto4));
-                    alert(`el precio del producto te queda en: ${precioBase} USD`);
-
-                } else {
-                    alert("no digistaste si o no");
-                }
-                break;
-
+              comprarJuego(response[3]);
+              break;
             case "evilwest":
-                alert("El precio del Juego Evilwest es de 150 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 18 USD");
-
-                let decisionevi = prompt("Digita, si o no quieres comprarlo ya mismo");
-                let precioProducto5 = juegosStock[4].precio;
-                let descuento5 = juegosStock[4].descuento;
-
-                if (decisionevi.toUpperCase() === "SI") {
-
-                    let nuevoPrecio = resta(suma(precioProducto5, iva(precioProducto5)), descuento5);
-                    alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
-
-                } else if (decisionevi.toUpperCase() === "NO") {
-
-                    let precioBase = suma(precioProducto5, iva(precioProducto5));
-                    alert(`el precio del producto te queda en: ${precioBase} USD`);
-
-                } else {
-                    alert("no digistaste si o no");
-                }
-                break;
-
+              comprarJuego(response[4]);
+              break;
             case "spiderman":
-                alert("El precio del Juego Spiderman es de 280 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 60 USD");
-
-                let decisionspi = prompt("Digita, si o no quieres comprarlo ya mismo");
-                let precioProducto6 = juegosStock[5].precio;
-                let descuento6 = juegosStock[5].descuento;
-
-                if (decisionspi.toUpperCase() === "SI") {
-
-                    let nuevoPrecio = resta(suma(precioProducto6, iva(precioProducto6)), descuento6);
-                    alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
-
-                } else if (decisionspi.toUpperCase() === "NO") {
-
-                    let precioBase = suma(precioProducto6, iva(precioProducto6));
-                    alert(`el precio del producto te queda en: ${precioBase} USD`);
-
-                } else {
-                    alert("no digistaste si o no");
-                }
-                break;
-
+              comprarJuego(response[5]);
+              break;
+            case "ESC":
+              return;
             default:
-                alert("escribelo bien porfavor");
-                break;
-        }
-
-        tipojue = prompt("ingresa el juego que escogiste. Disponibles => call of duty, god of war, overwatch, fifa23, evilwest, spiderman. O presiona ESC para salir");
-    };
+              Swal.fire("No escogiste nada");
+              break;
+          }
+      
+        
+        });
+    });
+      }
+      
+      seleccionarJuego();
+      
 });
 
 
@@ -682,3 +634,150 @@ botoncel.addEventListener("click", () => {
 
 // usuarioStorage ? (usuario = usuarioStorage, alert(`Bienvenido ${usuario}`)
 // ) : usuario = prompt("Ingrese el usuario"), sessionStorage.setItem("usuario", usuario), alert("Eres nuevo, Bienvenido");
+
+
+
+
+    // while (tipojue != "ESC") {
+    //     switch (tipojue) {
+    //         case "call of duty":
+
+    //             alert("El precio del Juego Call Of Duty es de 200 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 30 USD");
+
+    //             let decisioncod = prompt("Digita, si o no quieres comprarlo ya mismo");
+    //             let precioProducto1 = juegosStock[0].precio;
+    //             let descuento1 = juegosStock[0].descuento;
+
+    //             if (decisioncod.toUpperCase() === "SI") {
+
+    //                 let nuevoPrecio = resta(suma(precioProducto1, iva(precioProducto1)), descuento1);
+    //                 alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
+
+    //             } else if (decisioncod.toUpperCase() === "NO") {
+
+    //                 let precioBase = suma(precioProducto1, iva(precioProducto1));
+    //                 alert(`el precio del producto te queda en: ${precioBase} USD`);
+
+    //             } else {
+    //                 alert("no digistaste si o no");
+    //             }
+    //             break;
+
+    //         case "god of war":
+    //             alert("El precio del Juego god of war es de 190 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 28 USD");
+
+    //             let decisiongod = prompt("Digita, si o no quieres comprarlo ya mismo");
+    //             let precioProducto2 = juegosStock[1].precio;
+    //             let descuento2 = juegosStock[1].descuento;
+
+    //             if (decisiongod.toUpperCase() === "SI") {
+
+    //                 let nuevoPrecio = resta(suma(precioProducto2, iva(precioProducto2)), descuento2);
+    //                 alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
+
+    //             } else if (decisiongod.toUpperCase() === "NO") {
+
+    //                 let precioBase = suma(precioProducto2, iva(precioProducto2));
+    //                 alert(`el precio del producto te queda en: ${precioBase} USD`);
+
+    //             } else {
+    //                 alert("no digistaste si o no");
+    //             }
+    //             break;
+
+    //         case "overwatch":
+    //             alert("El precio del Juego overeatch es de 220 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 35 USD");
+
+    //             let decisionove = prompt("Digita, si o no quieres comprarlo ya mismo");
+    //             let precioProducto3 = juegosStock[2].precio;
+    //             let descuento3 = juegosStock[2].descuento;
+
+    //             if (decisionove.toUpperCase() === "SI") {
+
+    //                 let nuevoPrecio = resta(suma(precioProducto3, iva(precioProducto3)), descuento3);
+    //                 alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
+
+    //             } else if (decisionove.toUpperCase() === "NO") {
+
+    //                 let precioBase = suma(precioProducto3, iva(precioProducto3));
+    //                 alert(`el precio del producto te queda en: ${precioBase} USD`);
+
+    //             } else {
+    //                 alert("no digistaste si o no");
+    //             }
+
+    //             break;
+
+    //         case "fifa23":
+    //             alert("El precio del Juego FIFA23 es de 250 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 40 USD");
+
+    //             let decisionfif = prompt("Digita, si o no quieres comprarlo ya mismo");
+    //             let precioProducto4 = juegosStock[3].precio;
+    //             let descuento4 = juegosStock[3].descuento;
+
+    //             if (decisionfif.toUpperCase() === "SI") {
+
+    //                 let nuevoPrecio = resta(suma(precioProducto4, iva(precioProducto4)), descuento4);
+    //                 alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
+
+    //             } else if (decisionfif.toUpperCase() === "NO") {
+
+    //                 let precioBase = suma(precioProducto4, iva(precioProducto4));
+    //                 alert(`el precio del producto te queda en: ${precioBase} USD`);
+
+    //             } else {
+    //                 alert("no digistaste si o no");
+    //             }
+    //             break;
+
+    //         case "evilwest":
+    //             alert("El precio del Juego Evilwest es de 150 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 18 USD");
+
+    //             let decisionevi = prompt("Digita, si o no quieres comprarlo ya mismo");
+    //             let precioProducto5 = juegosStock[4].precio;
+    //             let descuento5 = juegosStock[4].descuento;
+
+    //             if (decisionevi.toUpperCase() === "SI") {
+
+    //                 let nuevoPrecio = resta(suma(precioProducto5, iva(precioProducto5)), descuento5);
+    //                 alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
+
+    //             } else if (decisionevi.toUpperCase() === "NO") {
+
+    //                 let precioBase = suma(precioProducto5, iva(precioProducto5));
+    //                 alert(`el precio del producto te queda en: ${precioBase} USD`);
+
+    //             } else {
+    //                 alert("no digistaste si o no");
+    //             }
+    //             break;
+
+    //         case "spiderman":
+    //             alert("El precio del Juego Spiderman es de 280 USD mas impuestos, pero si lo compras ya mismo tendras un descuento de 60 USD");
+
+    //             let decisionspi = prompt("Digita, si o no quieres comprarlo ya mismo");
+    //             let precioProducto6 = juegosStock[5].precio;
+    //             let descuento6 = juegosStock[5].descuento;
+
+    //             if (decisionspi.toUpperCase() === "SI") {
+
+    //                 let nuevoPrecio = resta(suma(precioProducto6, iva(precioProducto6)), descuento6);
+    //                 alert(`el precio del producto te queda en: ${nuevoPrecio} USD`);
+
+    //             } else if (decisionspi.toUpperCase() === "NO") {
+
+    //                 let precioBase = suma(precioProducto6, iva(precioProducto6));
+    //                 alert(`el precio del producto te queda en: ${precioBase} USD`);
+
+    //             } else {
+    //                 alert("no digistaste si o no");
+    //             }
+    //             break;
+
+    //         default:
+    //             alert("escribelo bien porfavor");
+    //             break;
+    //     }
+
+    //     tipojue = prompt("ingresa el juego que escogiste. Disponibles => call of duty, god of war, overwatch, fifa23, evilwest, spiderman. O presiona ESC para salir");
+    // };
